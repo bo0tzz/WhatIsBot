@@ -41,10 +41,20 @@ public class WhatIsBotListener implements Listener {
             JSONObject result = json.getJSONObject(i).getJSONObject("result");
             String title = result.getString("name");
             String description = result.getJSONObject("detailedDescription").getString("articleBody");
+            URL image = null;
+            if (result.has("image")) {
+                try {
+                    image = new URL(result.getJSONObject("image").getString("contentUrl"));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+            }
+
             results.add(InlineQueryResultArticle.builder()
                     .title(title)
                     .messageText(description)
                     .description(description)
+                    .thumbUrl(image)
                     .build()
             );
         }
