@@ -34,10 +34,6 @@ public class WhatIsBotListener implements Listener {
         JSONArray json = googleHook.query(query);
 
         if (json == null) {
-            event.getQuery().answer(bot.bot, InlineQueryResponse.builder()
-                    .results(InlineQueryResultArticle.builder()
-                            .title("No results found!").build())
-                    .build());
             return;
         }
 
