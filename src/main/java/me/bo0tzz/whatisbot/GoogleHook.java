@@ -30,7 +30,9 @@ public class GoogleHook {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        if (!response.getBody().getObject().has("itemListElement")) {
+        if (!response.getBody().getObject().has("itemListElement")
+                || response.getBody().getObject().getJSONArray("itemListElement").isNull(0))
+        {
             return null;
         }
         return response.getBody().getObject().getJSONArray("itemListElement");
