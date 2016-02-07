@@ -22,7 +22,7 @@ public class WhatIsBot {
 
     public WhatIsBot(String[] args) {
         System.out.println("Initialising bot");
-        bot = TelegramBot.login(args[0]);
+        bot = TelegramBot.login(args[0].trim());
         if (bot == null) {
             System.out.println("Failed to login! Faulty API key?");
             System.exit(1);

@@ -7,6 +7,7 @@ import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResul
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
 import pro.zackpollard.telegrambot.api.event.Listener;
 import pro.zackpollard.telegrambot.api.event.chat.inline.InlineQueryReceivedEvent;
+import pro.zackpollard.telegrambot.api.event.chat.message.TextMessageReceivedEvent;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,6 +32,15 @@ public class WhatIsBotListener implements Listener {
 
         String query = event.getQuery().getQuery();
         JSONArray json = googleHook.query(query);
+
+        if (json == null) {
+            event.getQuery().answer(bot.bot, InlineQueryResponse.builder()
+                    .results(InlineQueryResultArticle.builder()
+                            .title("No results found!").build())
+                    .build());
+            return;
+        }
+
         for (int i = 0; i < 3; i++) {
             JSONObject result = json.getJSONObject(i).getJSONObject("result");
             String title = result.getString("name");
