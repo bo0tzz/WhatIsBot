@@ -1,11 +1,10 @@
 package me.bo0tzz.whatisbot;
 
+import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 
 /**
  * Created by boet on 5-2-2016.
@@ -22,20 +21,25 @@ public class GoogleHook {
         this.keys = bot.getKeys();
     }
 
-    public JSONArray query(String query) {
-        HttpResponse<JsonNode> response = null;
+    public GraphResult query(String query) {
+
+        HttpResponse<String> response = null;
         try {
             response = Unirest.get(getUrl() + query.replace(" ", "+"))
-                    .asJson();
+                    .asString();
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        if (!response.getBody().getObject().has("itemListElement")
-                || response.getBody().getObject().getJSONArray("itemListElement").isNull(0))
-        {
-            return null;
+        System.out.println("HTTPResponse: " + response.getBody());
+
+        GraphResult result = null;
+        try {
+            result = new Gson().fromJson(response.getBody(), GraphResult.class);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return response.getBody().getObject().getJSONArray("itemListElement");
+
+        return result;
     }
 
     public String getUrl() {

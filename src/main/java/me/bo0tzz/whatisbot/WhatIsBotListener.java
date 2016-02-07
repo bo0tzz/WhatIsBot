@@ -1,6 +1,7 @@
 package me.bo0tzz.whatisbot;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import pro.zackpollard.telegrambot.api.chat.inline.send.InlineQueryResponse;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResult;
@@ -31,32 +32,31 @@ public class WhatIsBotListener implements Listener {
         List<InlineQueryResult> results = new ArrayList<>(3);
 
         String query = event.getQuery().getQuery();
-        JSONArray json = googleHook.query(query);
-
-        if (json == null) {
+        System.out.println(query);
+        List<GraphResultEntry> graphResultEntries = googleHook.query(query).getGraphResultEntries();
+        if (results.isEmpty()) {
+            System.out.println("Result list is empty");
             return;
         }
 
-        for (int i = 0; i < 3; i++) {
-            JSONObject result = json.getJSONObject(i).getJSONObject("result");
-            String title = result.getString("name");
-            String description = result.getJSONObject("detailedDescription").getString("articleBody");
-            URL image = null;
-            if (result.has("image")) {
-                try {
-                    image = new URL(result.getJSONObject("image").getString("contentUrl"));
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            }
+        int limit = graphResultEntries.size();
+        System.out.println("Result list size: " + limit);
 
-            results.add(InlineQueryResultArticle.builder()
-                    .title(title)
-                    .messageText(description)
-                    .description(description)
-                    .thumbUrl(image)
-                    .build()
-            );
+        for (int i = 0; i <= limit; i++) {
+            GraphResultEntry entry = graphResultEntries.get(i);
+            System.out.println("Entry #" + i + " - " + entry.getName() + " - " + entry.getDescription() + " - " + entry.getImage());
+
+            try {
+                results.add(InlineQueryResultArticle.builder()
+                        .title(entry.getName())
+                        .messageText(entry.getDetailedDescription())
+                        .description(entry.getDescription())
+                        .thumbUrl(new URL(entry.getImage()))
+                        .build()
+                );
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
 
         event.getQuery().answer(bot.bot, InlineQueryResponse.builder().results(results).build());
