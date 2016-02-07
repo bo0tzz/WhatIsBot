@@ -54,7 +54,6 @@ public class WhatIsBotListener implements Listener {
             results.add(InlineQueryResultArticle.builder()
                     .title(title)
                     .messageText(description)
-                    .url(url)
                     .build()
             );
         }
