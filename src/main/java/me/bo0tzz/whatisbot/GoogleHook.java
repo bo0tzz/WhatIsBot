@@ -34,7 +34,7 @@ public class GoogleHook {
 
         GraphResult result = null;
         try {
-            result = new Gson().fromJson(response.getBody(), GraphResult.class);
+            result = new Gson().fromJson(response.getBody().replaceAll("@", ""), GraphResult.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

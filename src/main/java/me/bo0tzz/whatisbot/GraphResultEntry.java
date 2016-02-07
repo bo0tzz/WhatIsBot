@@ -20,10 +20,16 @@ public class GraphResultEntry {
     }
 
     public String getDetailedDescription() {
+        if (detailedDescription == null) {
+            return null;
+        }
         return detailedDescription.get("articleBody");
     }
 
     public String getImage() {
+        if (image == null) {
+            return null;
+        }
         return image.get("contentUrl");
     }
 

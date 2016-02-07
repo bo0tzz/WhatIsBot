@@ -34,7 +34,7 @@ public class WhatIsBotListener implements Listener {
         String query = event.getQuery().getQuery();
         System.out.println(query);
         List<GraphResultEntry> graphResultEntries = googleHook.query(query).getGraphResultEntries();
-        if (results.isEmpty()) {
+        if (graphResultEntries.isEmpty()) {
             System.out.println("Result list is empty");
             return;
         }
@@ -42,9 +42,8 @@ public class WhatIsBotListener implements Listener {
         int limit = graphResultEntries.size();
         System.out.println("Result list size: " + limit);
 
-        for (int i = 0; i <= limit; i++) {
-            GraphResultEntry entry = graphResultEntries.get(i);
-            System.out.println("Entry #" + i + " - " + entry.getName() + " - " + entry.getDescription() + " - " + entry.getImage());
+        for (GraphResultEntry entry : graphResultEntries) {
+            System.out.println("Entry: " + entry.getName() + " - " + entry.getDescription() + " - " + entry.getImage());
 
             try {
                 results.add(InlineQueryResultArticle.builder()
