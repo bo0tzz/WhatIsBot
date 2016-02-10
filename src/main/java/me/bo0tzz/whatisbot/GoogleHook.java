@@ -30,7 +30,9 @@ public class GoogleHook {
         } catch (UnirestException e) {
             e.printStackTrace();
         }
-        System.out.println("HTTPResponse: " + response.getBody());
+        if (response.getBody().contains("\"error:\"")) {
+            return null;
+        }
 
         GraphResult result = null;
         try {

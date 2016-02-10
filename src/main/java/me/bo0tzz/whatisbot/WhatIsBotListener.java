@@ -32,30 +32,30 @@ public class WhatIsBotListener implements Listener {
         List<InlineQueryResult> results = new ArrayList<>(3);
 
         String query = event.getQuery().getQuery();
-        System.out.println(query);
-        List<GraphResultEntry> graphResultEntries = googleHook.query(query).getGraphResultEntries();
-        if (graphResultEntries.isEmpty()) {
-            System.out.println("Result list is empty");
-            return;
-        }
-
-        int limit = graphResultEntries.size();
-        System.out.println("Result list size: " + limit);
+        GraphResult result = googleHook.query(query);
+        if (result == null) return;
+        List<GraphResultEntry> graphResultEntries = result.getGraphResultEntries();
 
         for (GraphResultEntry entry : graphResultEntries) {
-            System.out.println("Entry: " + entry.getName() + " - " + entry.getDescription() + " - " + entry.getImage());
-
+            String name = entry.getName();
+            String detailedDescription = entry.getDetailedDescription();
+            String description = entry.getDescription();
+            URL url;
             try {
-                results.add(InlineQueryResultArticle.builder()
-                        .title(entry.getName())
-                        .messageText(entry.getDetailedDescription())
-                        .description(entry.getDescription())
-                        .thumbUrl(new URL(entry.getImage()))
-                        .build()
-                );
+                url = new URL(entry.getImage());
             } catch (MalformedURLException e) {
-                e.printStackTrace();
+                url = null;
             }
+
+            if (name == null || detailedDescription == null) continue;
+
+            results.add(InlineQueryResultArticle.builder()
+                    .title(name)
+                    .messageText(detailedDescription)
+                    .description(description)
+                    .thumbUrl(url)
+                    .build()
+            );
         }
 
         event.getQuery().answer(bot.bot, InlineQueryResponse.builder().results(results).build());
