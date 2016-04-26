@@ -3,6 +3,7 @@ package me.bo0tzz.whatisbot;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import pro.zackpollard.telegrambot.api.chat.inline.send.InlineQueryResponse;
+import pro.zackpollard.telegrambot.api.chat.inline.send.content.InputTextMessageContent;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResult;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
 import pro.zackpollard.telegrambot.api.event.Listener;
@@ -52,7 +53,9 @@ public class WhatIsBotListener implements Listener {
 
             results.add(InlineQueryResultArticle.builder()
                     .title(title)
-                    .messageText(description)
+                    .inputMessageContent(InputTextMessageContent.builder()
+                            .messageText(description)
+                            .build())
                     .description(description)
                     .thumbUrl(image)
                     .build()
