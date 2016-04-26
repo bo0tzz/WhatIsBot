@@ -4,6 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import pro.zackpollard.telegrambot.api.chat.inline.send.InlineQueryResponse;
+import pro.zackpollard.telegrambot.api.chat.inline.send.content.InputMessageContent;
+import pro.zackpollard.telegrambot.api.chat.inline.send.content.InputTextMessageContent;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResult;
 import pro.zackpollard.telegrambot.api.chat.inline.send.results.InlineQueryResultArticle;
 import pro.zackpollard.telegrambot.api.event.Listener;
@@ -51,7 +53,9 @@ public class WhatIsBotListener implements Listener {
 
             results.add(InlineQueryResultArticle.builder()
                     .title(name)
-                    .messageText(detailedDescription)
+                    .inputMessageContent(InputTextMessageContent.builder()
+                            .messageText(detailedDescription)
+                            .build())
                     .description(description)
                     .thumbUrl(url)
                     .build()
