@@ -13,7 +13,6 @@ import org.json.JSONObject;
 public class GoogleHook {
     private final WhatIsBot bot;
     private final String key;
-    private int lastKey = 0;
 
     private static final String API_URL = "https://kgsearch.googleapis.com/v1/entities:search?";
 
