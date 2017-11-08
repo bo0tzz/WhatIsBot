@@ -12,14 +12,14 @@ import org.json.JSONObject;
  */
 public class GoogleHook {
     private final WhatIsBot bot;
-    private final String[] keys;
+    private final String key;
     private int lastKey = 0;
 
     private static final String API_URL = "https://kgsearch.googleapis.com/v1/entities:search?";
 
     public GoogleHook(WhatIsBot bot) {
         this.bot = bot;
-        this.keys = bot.getKeys();
+        this.key = bot.getKeys();
     }
 
     public JSONArray query(String query) {
@@ -39,14 +39,6 @@ public class GoogleHook {
     }
 
     public String getUrl() {
-        int chosenKey = ++lastKey;
-
-        if(chosenKey >= keys.length) {
-
-            chosenKey = 0;
-            lastKey = 0;
-        }
-
-        return API_URL + "key=" + keys[chosenKey] + "&query=";
+        return API_URL + "key=" + key + "&query=";
     }
 }
